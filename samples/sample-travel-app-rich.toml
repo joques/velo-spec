@@ -1,0 +1,271 @@
+author = "John Doe john@example.com"
+[mvBag]
+  id = "travel-web-app"
+  instances = 2
+  networks = ["Net1","Net2"]
+user = "gervasius"
+version = "0.1"
+
+  [[mvBag.labels]]
+  app = "travel-web-app"
+  tier ="production"
+
+  [[mvBag.containers]]
+  name = "web-interface"
+  restart = "Always"
+  user = "admin"
+
+    [mvBag.containers.healthcheck]
+    gracePeriodSeconds = 30.0
+    ignoreHttp1xx = false
+    intervalSeconds = 30.0
+    maxConsecutiveFailures = 3.0
+    path = "somePath"
+    portIndex = 1.0
+    protocol = "TCP"
+    timeoutSeconds = 60.0
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:16.04"
+    kind = "Docker"
+
+      [[mvBag.containers.image.labels]]
+      lastUpdateBy = "root"
+
+      [[mvBag.containers.image.commands]]
+      #install git
+      runShell = ["install","-y", "git core"]
+      #install python
+      run = "install – y python-pip"
+
+      [[mvBag.containers.image.commands]]
+      #pull the python app
+      runShell = ["git","clone", "https://git.logicpp.net/app/python-app.git"]
+      #run the python ap
+      run = "python app/python-app.py"
+
+    [[mvBag.containers.labels]]
+    tiers = "front-end"
+    Apps = "booking-web-app"
+
+    [mvBag.containers.resources]
+    cpus = 4
+    mem = 32
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "/docker_storage/booking"
+    name = "bookingFolder"
+    readOnly = false
+
+  [[mvBag.containers]]
+  name = "car-reservation"
+  restart = "OnFailure"
+  user = "root"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "node:10"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/usr/src/app"
+      #copy package.json
+      run = "npm install"
+      copy = ["./package.json","/release"]
+      entrypoint = ["sh", "run.sh"]
+
+    [[mvBag.containers.labels]]
+    tiers = "back-end"
+    Apps = "travel-web-app"
+
+   [[mvBag.containers.networks]]
+    containerPort = 8080
+    hostPort = 8080
+    name = "nodePort"
+    protocol = "TCP"
+
+  [[mvBag.containers]]
+  name = "hotel-reservation"
+  restart = "OnFailure"
+  user = "root"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "golang:1.12.0-alpine3.9"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/usr/src/app"
+      copy = [".","/app"]
+
+      [[mvBag.containers.image.commands]]
+      #we run go build to compile the binary
+      run = "go build -o main ."
+
+    [[mvBag.containers.labels]]
+    tiers = "back-end"
+    Apps = "travel-web-app"
+
+   [[mvBag.containers.networks]]
+    containerPort = 8081
+    hostPort = 8081
+    name = "GoPort"
+    protocol = "TCP"
+
+  [[mvBag.containers]]
+  name = "flight-reservation"
+  restart = "OnFailure"
+  user = "root"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "openjdk:8-jdk-alpine"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/usr/src/app"
+      copy = ["./application.jar", "/app"]
+      entrypoint = ["/usr/bin/java",""]
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["-jar", "/usr/src/app/application.jar"]
+
+    [[mvBag.containers.labels]]
+    tiers = "back-end"
+    Apps = "travel-web-app"
+
+    [[mvBag.containers.networks]]
+    containerPort = 8888
+    hostPort = 8888
+    name = "javaPort"
+    protocol = "TCP"
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "/var/lib/config-repo"
+    name = "configFolder"
+    readOnly = false
+
+  [[mvBag.containers]]
+  name = "mongoDB"
+  restart = "OnFailure"
+  user = "root"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:10.4"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/data"
+      run = "apt-get install -y mongodb-org"
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["mongod"]
+
+    [[mvBag.containers.labels]]
+    tiers = "storage"
+    Apps = "travel-web-app"
+
+    [[mvBag.containers.networks]]
+    containerPort = 27017
+    hostPort = 27017
+    name = "mongoProcess"
+    protocol = "TCP"
+
+    [[mvBag.containers.networks]]
+    containerPort = 28017
+    hostPort = 28017
+    name = "mongoHttp"
+    protocol = "TCP"
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "/data"
+    name = "dataFolder"
+    readOnly = false
+
+  [[mvBag.containers]]
+  name = "RethinkDB"
+  restart = "OnFailure"
+  user = "root"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:10.4"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/data"
+      run = "apt-get install -y rethinkdb python-pip"
+
+      [[mvBag.containers.image.commands]]
+      # Install python driver for rethinkdb
+      runShell = ["pip","install","rethinkdb"]
+
+    [[mvBag.containers.labels]]
+    tiers = "storage"
+    Apps = "travel-web-app"
+
+    [[mvBag.containers.networks]]
+    containerPort = 8080
+    hostPort = 8080
+    name = "WebUI"
+    protocol = "TCP"
+
+    [[mvBag.containers.networks]]
+    containerPort = 28015
+    hostPort = 28015
+    name = "rethink process"
+    protocol = "TCP"
+
+    [[mvBag.containers.networks]]
+    containerPort = 29015
+    hostPort = 29015
+    name = "rethink cluster"
+    protocol = "TCP"
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "/data"
+    name = "dataFolder"
+    readOnly = false
+
+  [[mvBag.containers]]
+  name = "MySql"
+  restart = "OnFailure"
+  user = "root"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:10.4"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/data"
+      run = "apt-get install -y mysql-server"
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["mysqld_safe"]
+
+    [[mvBag.containers.labels]]
+    tiers = "storage"
+    Apps = "travel-web-app"
+
+    [[mvBag.containers.networks]]
+    containerPort = 3306
+    hostPort = 3306
+    name = "mysqlPort"
+    protocol = "TCP"
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "/etc/mysql"
+    name = "dataFolder"
+    readOnly = false
+
+    
+
+
+
+
+
+
+    

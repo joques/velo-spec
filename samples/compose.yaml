@@ -1,0 +1,115 @@
+version: "3"
+services:
+  service:
+    MySql:
+      image: ubuntu:10.4
+      deploy:
+        replicas: 4
+        resources:
+          limits:
+          - cpus: "0"
+      containerName: MySql
+      healthCheck:
+        interval: "0"
+        timeout: "0"
+        retries: "0"
+        start_period: "0"
+      labels:
+      - tiers: storage
+      - Apps: travel-web-app
+    RethinkDB:
+      image: ubuntu:10.4
+      deploy:
+        replicas: 4
+        resources:
+          limits:
+          - cpus: "0"
+      containerName: RethinkDB
+      healthCheck:
+        interval: "0"
+        timeout: "0"
+        retries: "0"
+        start_period: "0"
+      labels:
+      - tiers: storage
+      - Apps: travel-web-app
+    car-reservation:
+      image: nginx:1.15.8-alpine
+      deploy:
+        replicas: 4
+        resources:
+          limits:
+          - cpus: "0"
+      containerName: car-reservation
+      healthCheck:
+        interval: "0"
+        timeout: "0"
+        retries: "0"
+        start_period: "0"
+      labels:
+      - tierss: back-end
+      - Apps: travel-web-app
+    flight-reservation:
+      image: openjdk:8-jdk-alpine
+      deploy:
+        replicas: 4
+        resources:
+          limits:
+          - cpus: "0"
+      containerName: flight-reservation
+      healthCheck:
+        interval: "0"
+        timeout: "0"
+        retries: "0"
+        start_period: "0"
+      labels:
+      - tiers: back-end
+      - Apps: travel-web-app
+    hotel-reservation:
+      image: golang:1.12.0-alpine3.9
+      deploy:
+        replicas: 4
+        resources:
+          limits:
+          - cpus: "0"
+      containerName: hotel-reservation
+      healthCheck:
+        interval: "0"
+        timeout: "0"
+        retries: "0"
+        start_period: "0"
+      labels:
+      - tierss: back-end
+      - Apps: travel-web-app
+    mongoDB:
+      image: ubuntu:10.4
+      deploy:
+        replicas: 4
+        resources:
+          limits:
+          - cpus: "0"
+      containerName: mongoDB
+      healthCheck:
+        interval: "0"
+        timeout: "0"
+        retries: "0"
+        start_period: "0"
+      labels:
+      - tiers: storage
+      - Apps: travel-web-app
+    web-interface:
+      image: ubuntu:16.04
+      deploy:
+        replicas: 4
+        resources:
+          limits:
+          - cpus: "0"
+      containerName: web-interface
+      healthCheck:
+        interval: "0"
+        timeout: "0"
+        retries: "0"
+        start_period: "0"
+      labels:
+      - tierss: front-end
+      - Apps: booking-web-app

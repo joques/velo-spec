@@ -1,0 +1,254 @@
+{
+   "version":"2020-01-19T21:27:58+01:00",
+   "id":"travel-web-app",
+   "user":"gervasius",
+   "instances":4,
+   "networks":[
+      "Net1",
+      "Net2"
+   ],
+   "executorResources":{
+
+   },
+   "scaling":{
+      "kind":"Docker"
+   },
+   "scheduling":{
+      "backoff":{
+
+      }
+   },
+   "containers":[
+      {
+         "name":"web-interface",
+         "check":{
+            "http":{
+
+            },
+            "tcp":{
+
+            }
+         },
+         "healthcheck":{
+
+         },
+         "image":{
+            "forcePull":true,
+            "id":"ubuntu:16.04",
+            "kind":"Docker"
+         },
+         "labels":[
+            {
+               "tierss":"front-end"
+            },
+            {
+               "Apps":"booking-web-app"
+            }
+         ],
+         "lifecycle":{
+
+         },
+         "resources":{
+
+         }
+      },
+      {
+         "name":"car-reservation",
+         "check":{
+            "http":{
+
+            },
+            "tcp":{
+
+            }
+         },
+         "healthcheck":{
+
+         },
+         "image":{
+            "forcePull":true,
+            "id":"nginx:1.15.8-alpine",
+            "kind":"Docker"
+         },
+         "labels":[
+            {
+               "tierss":"back-end"
+            },
+            {
+               "Apps":"travel-web-app"
+            }
+         ],
+         "lifecycle":{
+
+         },
+         "resources":{
+
+         }
+      },
+      {
+         "name":"hotel-reservation",
+         "check":{
+            "http":{
+
+            },
+            "tcp":{
+
+            }
+         },
+         "healthcheck":{
+
+         },
+         "image":{
+            "forcePull":true,
+            "id":"golang:1.12.0-alpine3.9",
+            "kind":"Docker"
+         },
+         "labels":[
+            {
+               "tierss":"back-end"
+            },
+            {
+               "Apps":"travel-web-app"
+            }
+         ],
+         "lifecycle":{
+
+         },
+         "resources":{
+
+         }
+      },
+      {
+         "name":"flight-reservation",
+         "check":{
+            "http":{
+
+            },
+            "tcp":{
+
+            }
+         },
+         "healthcheck":{
+
+         },
+         "image":{
+            "forcePull":true,
+            "id":"openjdk:8-jdk-alpine",
+            "kind":"Docker"
+         },
+         "labels":[
+            {
+               "tiers":"back-end"
+            },
+            {
+               "Apps":"travel-web-app"
+            }
+         ],
+         "lifecycle":{
+
+         },
+         "resources":{
+
+         }
+      },
+      {
+         "name":"mongoDB",
+         "check":{
+            "http":{
+
+            },
+            "tcp":{
+
+            }
+         },
+         "healthcheck":{
+
+         },
+         "image":{
+            "forcePull":true,
+            "id":"ubuntu:10.4",
+            "kind":"Docker"
+         },
+         "labels":[
+            {
+               "tiers":"storage"
+            },
+            {
+               "Apps":"travel-web-app"
+            }
+         ],
+         "lifecycle":{
+
+         },
+         "resources":{
+
+         }
+      },
+      {
+         "name":"RethinkDB",
+         "check":{
+            "http":{
+
+            },
+            "tcp":{
+
+            }
+         },
+         "healthcheck":{
+
+         },
+         "image":{
+            "forcePull":true,
+            "id":"ubuntu:10.4",
+            "kind":"Docker"
+         },
+         "labels":[
+            {
+               "tiers":"storage"
+            },
+            {
+               "Apps":"travel-web-app"
+            }
+         ],
+         "lifecycle":{
+
+         },
+         "resources":{
+
+         }
+      },
+      {
+         "name":"MySql",
+         "check":{
+            "http":{
+
+            },
+            "tcp":{
+
+            }
+         },
+         "healthcheck":{
+
+         },
+         "image":{
+            "forcePull":true,
+            "id":"ubuntu:10.4",
+            "kind":"Docker"
+         },
+         "labels":[
+            {
+               "tiers":"storage"
+            },
+            {
+               "Apps":"travel-web-app"
+            }
+         ],
+         "lifecycle":{
+
+         },
+         "resources":{
+
+         }
+      }
+   ]
+}

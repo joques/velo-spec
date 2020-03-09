@@ -1,0 +1,149 @@
+author = "John Doe john@example.com"
+[mvBag]
+  id = "travel-web-app"
+  instances = 4
+  networks = ["Net1","Net2"]
+user = "gervasius"
+version = "0.1"
+
+  [[mvBag.labels]]
+  app = "travel-web-app"
+  tier ="production"
+
+  [[mvBag.containers]]
+  name = "web-interface"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:16.04"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["install","-y", "git core"]
+      run = "install – y python-pip"
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["git","clone", "https://git.logicpp.net/app/python-app.git"]
+      run = "python app/python-app.py"
+
+    [[mvBag.containers.labels]]
+    tierss = "front-end"
+    Apps = "booking-web-app"
+
+  [[mvBag.containers]]
+  name = "car-reservation"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "nginx:1.15.8-alpine"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/usr/src/app"
+      #copy package.json
+      run = "npm install"
+      copy = ["./package.json","/release"]
+      entrypoint = ["sh", "run.sh"]
+
+    [[mvBag.containers.labels]]
+    tierss = "back-end"
+    Apps = "travel-web-app"
+
+  [[mvBag.containers]]
+  name = "hotel-reservation"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "golang:1.12.0-alpine3.9"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/usr/src/app"
+      copy = [".","/app"]
+
+      [[mvBag.containers.image.commands]]
+      #we run go build to compile the binary
+      run = "go build -o main ."
+
+    [[mvBag.containers.labels]]
+    tierss = "back-end"
+    Apps = "travel-web-app"
+
+  [[mvBag.containers]]
+  name = "flight-reservation"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "openjdk:8-jdk-alpine"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/usr/src/app"
+      copy = ["./application.jar", "/app"]
+      entrypoint = ["/usr/bin/java",""]
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["-jar", "/usr/src/app/application.jar"]
+
+    [[mvBag.containers.labels]]
+    tiers = "back-end"
+    Apps = "travel-web-app"
+
+  [[mvBag.containers]]
+  name = "mongoDB"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:10.4"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/data"
+      run = "apt-get install -y mongodb-org"
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["mongod"]
+
+    [[mvBag.containers.labels]]
+    tiers = "storage"
+    Apps = "travel-web-app"
+
+  [[mvBag.containers]]
+  name = "RethinkDB"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:10.4"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/data"
+      run = "apt-get install -y rethinkdb python-pip"
+
+      [[mvBag.containers.image.commands]]
+      # Install python driver for rethinkdb
+      runShell = ["pip","install","rethinkdb"]
+
+    [[mvBag.containers.labels]]
+    tiers = "storage"
+    Apps = "travel-web-app"
+
+  [[mvBag.containers]]
+  name = "MySql"
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:10.4"
+    kind = "Docker"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/data"
+      run = "apt-get install -y mysql-server"
+
+      [[mvBag.containers.image.commands]]
+      runShell = ["mysqld_safe"]
+
+    [[mvBag.containers.labels]]
+    tiers = "storage"
+    Apps = "travel-web-app"
+    
