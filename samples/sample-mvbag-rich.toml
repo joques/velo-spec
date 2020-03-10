@@ -1,0 +1,217 @@
+author = "Gervasius Ishuuwa"
+[mvBag]
+  id = "Pod_ID"
+  instances = 2
+  networks = ["Net1","Net2"]
+  matchExpressions = [
+  ["tier","In","cache"],
+  [ "environment","NotIn","dev"]
+]
+
+[[mvBag.secrets]]
+
+  [mvBag.secrets.secret1]
+  source = "/db/password"
+
+  [mvBag.secrets.secret3]
+  source = "/foo2"
+
+user = "gervasius"
+version = "2019-05-10"
+
+  [[mvBag.environment]]
+  PodEnv = "PodEnvVal"
+
+  [mvBag.executorResources]
+  cpu = 2.0
+  disk = 1.0
+  memory = 32.0
+
+  [[mvBag.labels]]
+  PodLabel = "PodLabel"
+
+  [mvBag.scaling]
+  kind = "scaling-type-1"
+
+  [mvBag.scheduling]
+  killSelection = "YOUNGEST_FIRST"
+  placement = "place"
+  unreachableStrategy = "strategy"
+  upgrade = "upgrade"
+
+    [mvBag.scheduling.backoff]
+    backoff = 1.0
+    backoffFactor = 2.0
+    maxLaunchDelaySeconds = 45.0
+
+  [[mvBag.containers]]
+  exec = "Exec-Somnthing"
+  name = "IntercityContainer"
+  tty = true
+  restart = "Always"
+  user = "gervasius"
+
+    [mvBag.containers.check]
+    delaySeconds = 60.0
+    exec = "exec-somthing"
+    intervalSeconds = 80.0
+    timeoutSeconds = 0.0
+
+      [mvBag.containers.check.http]
+      path = "https://gobyexample.com/"
+      portIndex = 1.0
+      scheme = "Schem1"
+
+      [mvBag.containers.check.tcp]
+      portIndex = 2.0
+
+    [[mvBag.containers.environment]]
+    Ev1 = "EnvVAlue"
+
+    [mvBag.containers.healthcheck]
+    gracePeriodSeconds = 30.0
+    ignoreHttp1xx = false
+    intervalSeconds = 30.0
+    maxConsecutiveFailures = 3.0
+    path = "somePath"
+    portIndex = 1.0
+    protocol = "TCP"
+    timeoutSeconds = 60.0
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "image_id"
+    kind = "Docker"
+    pullConfig = "someconfigFile"
+
+      [[mvBag.containers.image.labels]]
+      Label = "LabelValue"
+
+    [[mvBag.containers.labels]]
+    Label = "LabelValue"
+
+    [mvBag.containers.lifecycle]
+    killGracePeriodSeconds = 60
+
+    [mvBag.containers.resources]
+    cpus = 2
+    mem = 32
+
+    [[mvBag.containers.artifacts]]
+    uri = "https://gobyexample.com/"
+
+    [[mvBag.containers.networks]]
+    containerPort = 80
+    hostPort = 8080
+    name = "Port1"
+    networkNames = [
+      "Network1",
+      "Network2"
+    ]
+    protocol = "TCP"
+
+      [[mvBag.containers.networks.labels]]
+      Label = "LabelValue"
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "docker_storage"
+    name = "Volume1"
+    readOnly = true
+
+  [[mvBag.containers]]
+  exec = "Exec-Somnthing"
+  name = "IntercityContainer"
+  tty = true
+  restart = "Always"
+  user = "gervasius"
+
+    [mvBag.containers.check]
+    delaySeconds = 60
+    exec = "exec-somthing"
+    intervalSeconds = 80
+    timeoutSeconds = 0
+
+      [mvBag.containers.check.http]
+      path = "https://gobyexample.com/"
+      portIndex = 1
+      scheme = "Schem1"
+
+      [mvBag.containers.check.tcp]
+      portIndex = 2
+
+    [[mvBag.containers.environment]]
+    Ev2 = "EnvVAlue2"
+
+    [mvBag.containers.healthcheck]
+    gracePeriodSeconds = 30
+    ignoreHttp1xx = false
+    intervalSeconds = 30
+    maxConsecutiveFailures = 3
+    path = "somePath"
+    portIndex = 1
+    protocol = "TCP"
+    timeoutSeconds = 60
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "image_id"
+    kind = "Docker"
+    pullConfig = "someconfigFile"
+
+      [[mvBag.containers.image.labels]]
+      Label = "LabelValue"
+
+      [[mvBag.containers.image.commands]]
+      workdir = "/usr/src/app/"
+      runShell = ["/bin/bash","-c", "echo hello"]
+      cmdShell = ["/usr/bin/wc","--help", "-y"]
+      run = "apt-get install -y nginx"
+      cmd = "echo This is a test."
+      copy = ["hom?.txt","/mydir/"]
+      entrypoint = ["top", "-b"]
+      add  = ["hom?.txt","/mydir/"]
+
+    [[mvBag.containers.labels]]
+    Label = "LabelValue"
+
+    [mvBag.containers.lifecycle]
+    killGracePeriodSeconds = 60
+
+    [mvBag.containers.resources]
+    cpus = 2
+    mem = 32
+
+    [[mvBag.containers.artifacts]]
+    uri = "https://gobyexample.com/"
+
+    [[mvBag.containers.networks]]
+    containerPort = 81
+    hostPort = 8081
+    name = "Port2"
+    networkNames = [
+      "Network1",
+      "Network2"
+    ]
+    protocol = "TCP"
+
+      [[mvBag.containers.networks.labels]]
+      Label = "LabelValue"
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "docker_storage"
+    name = "Volume1"
+    readOnly = true
+
+  [[mvBag.volumes]]
+  containerPath = "container-path"
+  mode = "RW"
+
+    [mvBag.volumes.persistent]
+    maxSize = 50
+    profileName = "gervasius"
+    size = 68
+    type = "Persistent"
+
+      [[mvBag.volumes.persistent.constraints]]
+      minItems = 0
+      maxItems = 50

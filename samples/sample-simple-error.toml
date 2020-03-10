@@ -1,0 +1,69 @@
+dauthor = "John Doe john@example.com"
+
+[mvBag]
+id = "booking-web-app"
+instances = 2
+networks = ["Net1","Net2"]
+matchExpressions = [
+  ["tier","In","frontend"],
+  ["environment","NotIn","dev"]
+]
+user = "root"
+version = "2019-06-01"
+
+  [[mvBag.labels]]
+  App = "booking-web-app"
+  Environment = "production"
+
+  [[mvBag.containers]]
+  name = "python-app"
+  restart = "Always"
+  user = "root"
+
+    [mvBag.containers.healthcheck]
+    gracePeriodSeconds = 30
+    ignoreHttp1xx = false
+    intervalSeconds = 30
+    maxConsecutiveFailures = 3
+    portIndex = 1
+    protocol = "TCP"
+    timeoutSeconds = 60
+
+    [mvBag.containers.image]
+    forcePull = true
+    id = "ubuntu:16.04"
+    kind = "Docker"
+
+      [[mvBag.containers.image.labels]]
+      lastUpdateBy = "root"
+
+      [[mvBag.containers.image.commands]]
+      #install git
+      runShell = ["install","-y","git core"]
+      #install python
+      run = "install – y python-pip"
+
+      [[mvBag.containers.image.commands]]
+      #pull the python app
+      runShell = ["git","clone","https://git.logicpp.net/app/python-app.git"]
+      #run the python app
+      run = "python app/python-app.py"
+
+    [[mvBag.containers.labels]]
+    tier = "front-end"
+    App = "booking-web-app"
+
+    [mvBag.containers.resources]
+    cpus = 4
+    mem = 32
+
+    [[mvBag.containers.networks]]
+    containerPort = 80
+    hostPort = 80
+    name = "frontEndPort"
+    protocol = "TCP"
+
+    [[mvBag.containers.volumeMounts]]
+    mountPath = "/docker_storage/booking"
+    name = "bookingFolder"
+    readOnly = false

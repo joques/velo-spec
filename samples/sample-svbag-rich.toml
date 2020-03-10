@@ -1,0 +1,131 @@
+author = "Gervasius Ishuuwa"
+[svBag]
+id = "/foo"
+instances = 2
+cmd = "sleep 1000"
+cpus = 1
+disk = 0
+mem = 16
+acceptedResourceRoles = [
+  "mesos_role2",
+  "another_role",
+  "More_roles"
+]
+args = [
+  "sleep",
+  "100"
+]
+backoffFactor = 1.15
+backoffSeconds = 1
+executor = ""
+maxLaunchDelaySeconds = 3600
+requirePorts = false
+user = "root"
+taskKillGracePeriodSeconds = 30
+tty = true
+
+  [svBag.container]
+  forcePullImage = false
+  image = "mesosphere:marathon/latest"
+  network = "BRIDGE"
+  privileged = false
+
+    [[svBag.container.labels]]
+    vip = "192.168.0.1:80"
+
+    [[svBag.container.parameters]]
+    key = "name"
+    value = "kdc"
+
+    [[svBag.container.portMappings]]
+    containerPort = 80
+    hostPort = 0
+    protocol = "tcp"
+    servicePort = 100
+    name = "http"
+
+    [[svBag.container.volumes]]
+    containerPath = "/docker_storage"
+    hostPath = "/hdd/tools/docker/registry"
+    mode = "RW"
+
+    [[svBag.container.commands]]
+    workdir = "/usr/src/svBag/"
+    runShell = ["/bin/bash","-c", "echo hello"]
+    cmdShell = ["/usr/bin/wc","--help", "-y"]
+    run = "apt-get install -y nginx"
+    cmd = "echo This is a test."
+    copy = ["hom?.txt","/mydir/"]
+    entrypoint = ["top", "-b"]
+    add  = ["hom?.txt","/mydir/"]
+    
+
+  [[svBag.env]]
+  XPS1 = "Test"
+  XPS2 = "Rest"
+
+  [[svBag.labels]]
+  owner = "zeus"
+  note = "Away from olympus"
+
+  [svBag.upgradeStrategy]
+  maximumOverCapacity = 1
+  minimumHealthCapacity = 1
+
+  [[svBag.secrets]]
+
+    [svBag.secrets.secret1]
+    source = "/db/password"
+
+    [svBag.secrets.secret3]
+    source = "/foo2"
+
+  [[svBag.healthChecks]]
+  gracePeriodSeconds = 300
+  ignoreHttp1xx = false
+  intervalSeconds = 20
+  maxConsecutiveFailures = 3
+  path = "/"
+  portIndex = 0
+  protocol = "HTTP"
+  timeoutSeconds = 20
+
+  [[svBag.readinessChecks]]
+  name = "myReadyCheck"
+  protocol = "HTTP"
+  path = "/v1/plan"
+  portName = "http"
+  intervalSeconds = 10
+  timeoutSeconds = 3
+  httpStatusCodesForReady = [
+    200,
+    204
+  ]
+  preserveLastResponse = true
+  [[svBag.readinessChecks]]
+  name = "myReadyCheck"
+  protocol = "HTTP"
+  path = "/v1/plan"
+  portName = "http"
+  intervalSeconds = 10
+  timeoutSeconds = 3
+  httpStatusCodesForReady = [
+    200
+  ]
+  preserveLastResponse = true
+
+  [[svBag.portDefinitions]]
+  port = 0
+  protocol = "tcp"
+  name = "http"
+
+    [[svBag.portDefinitions.labels]]
+    vip = "192.168.0.1:80"
+    vvip = "192.168.0.1:8443"
+
+  [[svBag.fetch]]
+  uri = "https://foo.com/setup.py"
+
+  [[svBag.fetch]]
+  uri = "https://foo.com/archive.zip"
+  
